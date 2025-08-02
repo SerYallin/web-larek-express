@@ -18,9 +18,7 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
     { $group: { _id: null, total: { $sum: "$price" }, count: { $sum: 1 } } }
   ])
     .then((result) => {
-      if (!result.length) {
-        throw new NotFoundError("Товары не найдены");
-      } else if (result[0].count !== order.items.length) {
+      if (!result.length || result[0].count !== order.items.length) {
         throw new InputDataError("Один или несколько товаров не найдены");
       } else if (result[0].total !== order.total) {
         throw new InputDataError("Неверная сумма заказа");
