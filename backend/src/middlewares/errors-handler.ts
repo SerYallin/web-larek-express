@@ -1,14 +1,12 @@
 import { isCelebrateError } from 'celebrate';
-export const errorsHandler = (err: any, req: any, res: any, next: any) => {
+
+const errorsHandler = (err: any, _req: any, res: any, _next: any) => {
   if (isCelebrateError(err)) {
-    const messages = [];
-    for (const [segment, joiError] of err.details.entries()) {
-      messages.push(joiError.message);
-    }
+    const messages = Array.from(err.details.entries()).map(([_, joiError]) => joiError.message);
     res.status(400).send({ message: messages.join('; ') });
-  }
-  else {
+  } else {
     res.status(err.statusCode || 500).send({ message: err.message });
   }
+};
 
-}
+export default errorsHandler;

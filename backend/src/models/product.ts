@@ -1,5 +1,5 @@
-import { IProduct } from '../types';
 import mongoose from 'mongoose';
+import { IProduct } from '../types';
 
 const productSchema = new mongoose.Schema<IProduct>({
   title: {
@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema<IProduct>({
   image: {
     type: {
       fileName: String,
-      originalName: String
+      originalName: String,
     },
     required: [true, 'Поле "Image" должно быть заполнено.'],
   },
@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema<IProduct>({
   },
   price: {
     type: Number,
-    default: null
-  }
+    default: null,
+  },
 });
 export default mongoose.model<IProduct>('product', productSchema);

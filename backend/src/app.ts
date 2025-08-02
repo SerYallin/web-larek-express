@@ -4,7 +4,7 @@ import  mongoose from 'mongoose';
 import product from './routes/products';
 import order from './routes/orders';
 import * as path from 'node:path';
-import { errorsHandler } from './middlewares/errors-handler';
+import errorsHandler from './middlewares/errors-handler';
 import { requestLogger, errorLogger } from './middlewares/loggers';
 
 

@@ -1,10 +1,8 @@
-import { Request, Response, NextFunction } from "express";
-import Product from '../models/product';
-import { IProduct } from '../types';
+import { Request, Response, NextFunction } from 'express';
 import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose';
-import { InputDataError, NotFoundError } from '../errors';
-
+import Product from '../models/product';
+import { InputDataError } from '../errors';
 
 export const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   const order = req.body;
@@ -15,13 +13,13 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
 
   await Product.aggregate([
     { $match: { _id: { $in: ids }, price: { $ne: null } } },
-    { $group: { _id: null, total: { $sum: "$price" }, count: { $sum: 1 } } }
+    { $group: { _id: null, total: { $sum: '$price' }, count: { $sum: 1 } } },
   ])
     .then((result) => {
       if (!result.length || result[0].count !== order.items.length) {
-        throw new InputDataError("Один или несколько товаров не найдены");
+        throw new InputDataError('Один или несколько товаров не найдены');
       } else if (result[0].total !== order.total) {
-        throw new InputDataError("Неверная сумма заказа");
+        throw new InputDataError('Неверная сумма заказа');
       }
       return result[0];
     })
@@ -34,9 +32,10 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
         next(new InputDataError(err.message));
-      }
-      else {
+      } else {
         next(err);
       }
     });
-}
+};
+
+export default createOrder;
