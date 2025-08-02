@@ -21,14 +21,14 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
       if (!result.length) {
         throw new NotFoundError("Товары не найдены");
       } else if (result[0].count !== order.items.length) {
-        throw new NotFoundError("Один или несколько товаров не найдены");
+        throw new InputDataError("Один или несколько товаров не найдены");
       } else if (result[0].total !== order.total) {
         throw new InputDataError("Неверная сумма заказа");
       }
       return result[0];
     })
     .then((result) => {
-      res.status(201).send({
+      res.send({
         id: faker.database.mongodbObjectId(),
         total: result.total,
       });
