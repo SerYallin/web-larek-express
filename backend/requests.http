@@ -1,0 +1,35 @@
+### Create product
+POST http://localhost:3000/product
+Content-Type: application/json
+
+{
+  "description": "Сжимайте мячик, чтобы снизить стресс от тем по бэкенду.",
+  "image": {
+    "fileName": "/images/Mithosis.png",
+    "originalName": "Mithosis.png"
+  },
+  "title": "Бэкенд-антистресс",
+  "category": "другое",
+  "price": 1000
+}
+
+### Create order
+POST http://localhost:3000/order
+Content-Type: application/json
+
+{
+  "payment": "card",
+  "email": "admin@ya.ru",
+  "phone": "+7999999999",
+  "address": "test",
+  "total": 110000,
+  "items": [
+    "688bc660ff76b04ec8867a64",
+    "688bc674ff76b04ec8867a6a"
+  ]
+}
+
+
+### GET request with a header
+GET http://localhost:3000/products
+Accept: application/json
