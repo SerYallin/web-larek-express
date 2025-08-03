@@ -59,6 +59,26 @@ export const validateOrder = celebrate({
   }),
 });
 
+export const userValidator = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    name: Joi.string().min(2).max(30).messages({
+      'string.base': 'Имя должно быть строкой',
+      'string.min': 'Имя должно содержать минимум 2 символа',
+      'string.max': 'Имя должно содержать максимум 30 символов',
+    }),
+    email: Joi.string().email().required().messages({
+      'string.base': 'Email должен быть строкой',
+      'string.email': 'Неправильный формат email',
+      'any.required': 'Не указан email',
+    }),
+    password: Joi.string().min(6).required().messages({
+      'string.base': 'Пароль должен быть строкой',
+      'string.min': 'Пароль должен содержать минимум 6 символов',
+      'any.required': 'Не указан пароль',
+    }),
+  }),
+});
+
 // export const validateId = celebrate({
 //   [Segments.PARAMS]: Joi.object().keys({
 //     id: Joi.string().required()
