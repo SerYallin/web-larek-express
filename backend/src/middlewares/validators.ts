@@ -1,4 +1,6 @@
 import { celebrate, Joi, Segments } from 'celebrate';
+import { CustomHelpers } from 'joi';
+import mongoose from 'mongoose';
 
 export const validateProduct = celebrate({
   [Segments.BODY]: Joi.object().keys({
@@ -18,6 +20,30 @@ export const validateProduct = celebrate({
     category: Joi.string().required().messages({
       'string.base': 'Категория должна быть строкой',
       'any.required': 'Не указана категория товара',
+    }),
+    description: Joi.string().messages({
+      'string.base': 'Описание должно быть строкой',
+    }),
+    price: Joi.number().messages({
+      'number.base': 'Цена должна быть числом',
+    }),
+  }),
+});
+
+export const validateUpdateProduct = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    title: Joi.string().min(2).max(30).required()
+      .messages({
+        'string.base': 'Название товара должно быть строкой',
+        'string.min': 'Название должно содержать минимум 2 символа',
+        'string.max': 'Название должно содержать максимум 30 символов',
+      }),
+    image: Joi.object({
+      fileName: Joi.string(),
+      originalName: Joi.string(),
+    }),
+    category: Joi.string().messages({
+      'string.base': 'Категория должна быть строкой',
     }),
     description: Joi.string().messages({
       'string.base': 'Описание должно быть строкой',
@@ -79,8 +105,18 @@ export const userValidator = celebrate({
   }),
 });
 
-// export const validateId = celebrate({
-//   [Segments.PARAMS]: Joi.object().keys({
-//     id: Joi.string().required()
-//   })
-// })
+const isObjectId = (value: string, helpers: CustomHelpers) => {
+  if (!mongoose.Types.ObjectId.isValid(value)) {
+    return helpers.error('any.invalid');
+  }
+  return value;
+};
+
+export const validateId = celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    productId: Joi.string().custom(isObjectId).required().messages({
+      'any.invalid': 'Неправильный формат productId',
+      'any.required': 'Не указан productId',
+    }),
+  }),
+});
