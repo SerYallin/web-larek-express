@@ -1,5 +1,4 @@
 import { celebrate, Joi, Segments } from 'celebrate';
-import { CustomHelpers } from 'joi';
 import mongoose from 'mongoose';
 
 export const validateProduct = celebrate({
@@ -105,7 +104,8 @@ export const userValidator = celebrate({
   }),
 });
 
-const isObjectId = (value: string, helpers: CustomHelpers) => {
+// @ts-ignore
+const isObjectId = (value, helpers) => {
   if (!mongoose.Types.ObjectId.isValid(value)) {
     return helpers.error('any.invalid');
   }
